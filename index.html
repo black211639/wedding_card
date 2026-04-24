@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>翔翔 & 阿柔 婚禮電子喜帖</title>
+  <meta name="description" content="翔翔與阿柔的婚禮電子喜帖">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main class="site-shell">
+    <section class="hero fade-section" id="hero">
+      <div class="hero-overlay"></div>
+      <div class="hero-content">
+        <p class="hero-kicker">We are getting married</p>
+        <h1 class="hero-title">
+          <span id="groom-name">翔翔</span>
+          <span class="ampersand">&amp;</span>
+          <span id="bride-name">阿柔</span>
+        </h1>
+        <p class="hero-date" id="hero-date">2026.12.12</p>
+      </div>
+    </section>
+
+    <section class="section photo-section fade-section" aria-labelledby="gallery-title">
+      <div class="section-heading">
+        <p class="eyebrow">Memories</p>
+        <h2 id="gallery-title">婚紗照</h2>
+      </div>
+      <div class="carousel" id="carousel" aria-label="婚紗照輪播">
+        <div class="carousel-track" id="carousel-track"></div>
+        <div class="carousel-controls">
+          <button class="carousel-btn" id="prev-btn" type="button" aria-label="上一張">‹</button>
+          <div class="carousel-dots" id="carousel-dots" aria-label="輪播頁籤"></div>
+          <button class="carousel-btn" id="next-btn" type="button" aria-label="下一張">›</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="section info-section fade-section" aria-labelledby="info-title">
+      <div class="section-heading">
+        <p class="eyebrow">Wedding Day</p>
+        <h2 id="info-title">婚禮資訊</h2>
+      </div>
+      <div class="card info-grid">
+        <article class="info-item">
+          <h3>日期</h3>
+          <p id="info-date"></p>
+        </article>
+        <article class="info-item">
+          <h3>時間</h3>
+          <p id="info-time"></p>
+        </article>
+        <article class="info-item">
+          <h3>地點</h3>
+          <p id="info-venue"></p>
+        </article>
+        <article class="info-item info-item-address">
+          <h3>地址</h3>
+          <p id="info-address"></p>
+        </article>
+      </div>
+    </section>
+
+    <section class="section map-section fade-section" aria-labelledby="map-title">
+      <div class="section-heading">
+        <p class="eyebrow">Navigation</p>
+        <h2 id="map-title">地圖導航</h2>
+      </div>
+      <div class="card map-card">
+        <p>點一下即可直接開啟導航。</p>
+        <button class="map-button" id="map-button" type="button">開啟 Google 地圖</button>
+      </div>
+    </section>
+
+    <section class="section transport-section fade-section" aria-labelledby="transport-title">
+      <div class="section-heading">
+        <p class="eyebrow">Getting There</p>
+        <h2 id="transport-title">交通資訊</h2>
+      </div>
+      <div class="card transport-list">
+        <article>
+          <h3>停車資訊</h3>
+          <p id="transport-parking"></p>
+        </article>
+        <article>
+          <h3>捷運</h3>
+          <p id="transport-mrt"></p>
+        </article>
+        <article>
+          <h3>公車</h3>
+          <p id="transport-bus"></p>
+        </article>
+      </div>
+    </section>
+
+    <section class="section schedule-section fade-section" aria-labelledby="schedule-title">
+      <div class="section-heading">
+        <p class="eyebrow">Timeline</p>
+        <h2 id="schedule-title">婚禮流程</h2>
+      </div>
+      <div class="card">
+        <ol class="schedule-list" id="schedule-list"></ol>
+      </div>
+    </section>
+
+    <section class="section note-section fade-section" aria-labelledby="note-title">
+      <div class="section-heading">
+        <p class="eyebrow">Warm Note</p>
+        <h2 id="note-title">小提醒</h2>
+      </div>
+      <div class="card note-card">
+        <p id="note-text"></p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer fade-section">
+    <p id="footer-invite">翔翔 & 阿柔 敬邀</p>
+  </footer>
+
+  <script id="embedded-wedding-data" type="application/json">
+    {
+      "groom": "翔翔",
+      "bride": "阿柔",
+      "date": "2026-12-12",
+      "time": "午宴",
+      "venue": "桃園彭園",
+      "address": "（請自行填寫完整地址）",
+      "map_link": "https://maps.google.com",
+      "transport": {
+        "parking": "現場提供停車位",
+        "mrt": "（自行填寫）",
+        "bus": "（自行填寫）"
+      },
+      "schedule": [
+        "11:30 迎賓",
+        "12:00 開席",
+        "13:00 一進",
+        "13:30 二進",
+        "14:00 敬酒",
+        "14:30 送客"
+      ],
+      "note": "敬請準時入席，謝謝您的蒞臨與祝福。"
+    }
+  </script>
+
+  <script src="script.js"></script>
+</body>
+</html>
