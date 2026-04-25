@@ -1,13 +1,13 @@
 const defaultWeddingInfo = {
-  groom: "翔翔",
-  bride: "阿柔",
+  groom: "景翔",
+  bride: "佳柔",
   date: "2026-12-12",
   time: "午宴",
-  venue: "桃園彭園",
-  address: "（請自行填寫完整地址）",
-  map_link: "https://maps.google.com",
+  venue: "桃園八德彭園",
+  address: "334桃園市八德區介壽路一段728號3樓",
+  map_link: "https://maps.app.goo.gl/kJ4QmBb84BgEKgTTA",
   transport: {
-    parking: "現場提供停車位",
+    parking: "現場提供地下停車位",
     mrt: "（自行填寫）",
     bus: "（自行填寫）"
   },
@@ -80,6 +80,9 @@ function renderWeddingInfo(data) {
   const groom = data.groom || defaultWeddingInfo.groom;
   const bride = data.bride || defaultWeddingInfo.bride;
   const dateText = formatDate(data.date || defaultWeddingInfo.date);
+  const parkingText = normalizeTransportText(data.transport?.parking || defaultWeddingInfo.transport.parking);
+  const mrtText = normalizeTransportText(data.transport?.mrt || defaultWeddingInfo.transport.mrt);
+  const busText = normalizeTransportText(data.transport?.bus || defaultWeddingInfo.transport.bus);
 
   setText("groom-name", groom);
   setText("bride-name", bride);
@@ -88,9 +91,9 @@ function renderWeddingInfo(data) {
   setText("info-time", data.time || defaultWeddingInfo.time);
   setText("info-venue", data.venue || defaultWeddingInfo.venue);
   setText("info-address", data.address || defaultWeddingInfo.address);
-  setText("transport-parking", data.transport?.parking || defaultWeddingInfo.transport.parking);
-  setText("transport-mrt", data.transport?.mrt || defaultWeddingInfo.transport.mrt);
-  setText("transport-bus", data.transport?.bus || defaultWeddingInfo.transport.bus);
+  setText("transport-parking", parkingText);
+  setText("transport-mrt", mrtText);
+  setText("transport-bus", busText);
   setText("note-text", data.note || defaultWeddingInfo.note);
   setText("footer-invite", `${groom} & ${bride} 敬邀`);
 
@@ -124,6 +127,7 @@ function setupCarousel() {
     image.alt = `婚紗照 ${index + 1}`;
     image.loading = index === 0 ? "eager" : "lazy";
     image.addEventListener("error", () => {
+      console.error(`Photo failed to load: ${src}`);
       image.hidden = true;
       if (!slide.querySelector(".slide-placeholder")) {
         const placeholder = document.createElement("div");
@@ -254,6 +258,18 @@ function setText(id, value) {
   if (element) {
     element.textContent = value;
   }
+}
+
+function normalizeTransportText(value) {
+  if (!value) {
+    return "交通資訊待補";
+  }
+
+  if (value.includes("自行填寫")) {
+    return "交通資訊待補";
+  }
+
+  return value.replace(/[()（）]/g, "").trim();
 }
 
 function formatDate(dateString) {
