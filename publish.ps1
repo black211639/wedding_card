@@ -39,6 +39,18 @@ function Get-GitConfigValue {
   return ($result | Out-String).Trim()
 }
 
+function Test-GitHubRemoteAccess {
+  param(
+    [Parameter(Mandatory = $true)]
+    [string]$RemoteName
+  )
+
+  & git ls-remote --exit-code $RemoteName HEAD *> $null
+  if ($LASTEXITCODE -ne 0) {
+    Fail "Could not connect to GitHub remote '$RemoteName'. Check network access and GitHub authentication first."
+  }
+}
+
 if (-not (Test-Path (Join-Path $repoRoot ".git"))) {
   Fail "Missing .git. This folder is not a Git repository."
 }
@@ -86,6 +98,9 @@ if ([string]::IsNullOrWhiteSpace($gitUserEmail)) {
 
   Run-Git -Args @("config", "user.email", $gitUserEmail)
 }
+
+Write-Host "Checking GitHub remote access..." -ForegroundColor Cyan
+Test-GitHubRemoteAccess -RemoteName "origin"
 
 $status = (& git status --porcelain)
 if ($LASTEXITCODE -ne 0) {
