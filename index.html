@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>景翔 & 佳柔 婚禮電子喜帖</title>
-  <meta name="description" content="景翔與佳柔的婚禮電子喜帖">
+  <meta name="description" content="誠摯邀請您蒞臨見證景翔與佳柔的婚禮時刻。">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -12,7 +12,8 @@
     <section class="hero fade-section" id="hero">
       <div class="hero-overlay"></div>
       <div class="hero-content">
-        <p class="hero-kicker">We are getting married</p>
+        <p class="hero-kicker">Wedding Invitation</p>
+        <p class="hero-message">誠摯邀請您蒞臨見證</p>
         <h1 class="hero-title">
           <span id="groom-name">景翔</span>
           <span class="ampersand">&amp;</span>
@@ -22,8 +23,20 @@
       </div>
     </section>
 
+    <section class="section invitation-section fade-section" aria-labelledby="invitation-title">
+      <div class="section-heading centered-heading">
+        <p class="eyebrow">Invitation</p>
+        <h2 id="invitation-title">誠摯邀請</h2>
+      </div>
+      <div class="card invitation-card">
+        <p id="invitation-message-line1">感謝您一路以來的陪伴與祝福。</p>
+        <p id="invitation-message-line2">我們將於這一天攜手步入人生新的旅程，</p>
+        <p id="invitation-message-line3">誠摯邀請您蒞臨，與我們一同分享這份喜悅。</p>
+      </div>
+    </section>
+
     <section class="section photo-section fade-section" aria-labelledby="gallery-title">
-      <div class="section-heading">
+      <div class="section-heading centered-heading">
         <p class="eyebrow">Memories</p>
         <h2 id="gallery-title">婚紗照</h2>
       </div>
@@ -38,8 +51,8 @@
     </section>
 
     <section class="section info-section fade-section" aria-labelledby="info-title">
-      <div class="section-heading">
-        <p class="eyebrow">Wedding Day</p>
+      <div class="section-heading centered-heading">
+        <p class="eyebrow">Wedding Info</p>
         <h2 id="info-title">婚禮資訊</h2>
       </div>
       <div class="card info-grid">
@@ -50,6 +63,7 @@
         <article class="info-item">
           <h3>時間</h3>
           <p id="info-time"></p>
+          <p class="sub-info" id="info-arrival-note"></p>
         </article>
         <article class="info-item">
           <h3>地點</h3>
@@ -63,54 +77,24 @@
     </section>
 
     <section class="section map-section fade-section" aria-labelledby="map-title">
-      <div class="section-heading">
-        <p class="eyebrow">Navigation</p>
+      <div class="section-heading centered-heading">
+        <p class="eyebrow">Map</p>
         <h2 id="map-title">地圖導航</h2>
       </div>
       <div class="card map-card">
-        <p>點一下即可直接開啟導航。</p>
+        <p id="map-description-line1">點擊下方按鈕即可開啟 Google 地圖導航。</p>
+        <p id="map-description-line2">建議提早出發，預留交通與停車時間。</p>
         <button class="map-button" id="map-button" type="button">開啟 Google 地圖</button>
       </div>
     </section>
 
-    <section class="section transport-section fade-section" aria-labelledby="transport-title">
-      <div class="section-heading">
-        <p class="eyebrow">Getting There</p>
-        <h2 id="transport-title">交通資訊</h2>
+    <section class="section reminder-section fade-section" aria-labelledby="reminder-title">
+      <div class="section-heading centered-heading">
+        <p class="eyebrow">Reminder</p>
+        <h2 id="reminder-title">當日提醒</h2>
       </div>
-      <div class="card transport-list">
-        <article>
-          <h3>停車資訊</h3>
-          <p id="transport-parking"></p>
-        </article>
-        <article>
-          <h3>捷運</h3>
-          <p id="transport-mrt"></p>
-        </article>
-        <article>
-          <h3>公車</h3>
-          <p id="transport-bus"></p>
-        </article>
-      </div>
-    </section>
-
-    <section class="section schedule-section fade-section" aria-labelledby="schedule-title">
-      <div class="section-heading">
-        <p class="eyebrow">Timeline</p>
-        <h2 id="schedule-title">婚禮流程</h2>
-      </div>
-      <div class="card">
-        <ol class="schedule-list" id="schedule-list"></ol>
-      </div>
-    </section>
-
-    <section class="section note-section fade-section" aria-labelledby="note-title">
-      <div class="section-heading">
-        <p class="eyebrow">Warm Note</p>
-        <h2 id="note-title">小提醒</h2>
-      </div>
-      <div class="card note-card">
-        <p id="note-text"></p>
+      <div class="card reminder-card">
+        <ul class="reminder-list" id="reminder-list"></ul>
       </div>
     </section>
   </main>
@@ -119,29 +103,38 @@
     <p id="footer-invite">景翔 & 佳柔 敬邀</p>
   </footer>
 
+  <audio id="bgm-audio" preload="none" loop>
+    <source src="assets/music/bgm.mp3" type="audio/mpeg">
+  </audio>
+
+  <button class="music-toggle" id="music-toggle" type="button" aria-label="播放背景音樂" aria-pressed="false">♫</button>
+
   <script id="embedded-wedding-data" type="application/json">
     {
       "groom": "景翔",
       "bride": "佳柔",
+      "hero_message": "誠摯邀請您蒞臨見證",
       "date": "2026-12-12",
-      "time": "午宴",
+      "time": "12:00 開席",
+      "arrival_note": "建議 11:30 入場",
       "venue": "桃園八德彭園",
       "address": "334桃園市八德區介壽路一段728號3樓",
       "map_link": "https://maps.app.goo.gl/kJ4QmBb84BgEKgTTA",
-      "transport": {
-        "parking": "現場提供地下停車位",
-        "mrt": "（自行填寫）",
-        "bus": "（自行填寫）"
-      },
-      "schedule": [
-        "11:30 迎賓",
-        "12:00 開席",
-        "13:00 一進",
-        "13:30 二進",
-        "14:00 敬酒",
-        "14:30 送客"
+      "invitation_message": [
+        "感謝您一路以來的陪伴與祝福。",
+        "我們將於這一天攜手步入人生新的旅程，",
+        "誠摯邀請您蒞臨，與我們一同分享這份喜悅。"
       ],
-      "note": "敬請準時入席，謝謝您的蒞臨與祝福。"
+      "map_description": [
+        "點擊下方按鈕即可開啟 Google 地圖導航。",
+        "建議提早出發，預留交通與停車時間。"
+      ],
+      "reminders": [
+        "建議提前 10 至 15 分鐘抵達",
+        "現場提供地下停車位",
+        "敬請準時入席"
+      ],
+      "note": "敬請準時入席"
     }
   </script>
 

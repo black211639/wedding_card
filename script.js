@@ -1,25 +1,28 @@
 const defaultWeddingInfo = {
   groom: "景翔",
   bride: "佳柔",
+  hero_message: "誠摯邀請您蒞臨見證",
   date: "2026-12-12",
-  time: "午宴",
+  time: "12:00 開席",
+  arrival_note: "建議 11:30 入場",
   venue: "桃園八德彭園",
   address: "334桃園市八德區介壽路一段728號3樓",
   map_link: "https://maps.app.goo.gl/kJ4QmBb84BgEKgTTA",
-  transport: {
-    parking: "現場提供地下停車位",
-    mrt: "（自行填寫）",
-    bus: "（自行填寫）"
-  },
-  schedule: [
-    "11:30 迎賓",
-    "12:00 開席",
-    "13:00 一進",
-    "13:30 二進",
-    "14:00 敬酒",
-    "14:30 送客"
+  invitation_message: [
+    "感謝您一路以來的陪伴與祝福。",
+    "我們將於這一天攜手步入人生新的旅程，",
+    "誠摯邀請您蒞臨，與我們一同分享這份喜悅。"
   ],
-  note: "敬請準時入席，謝謝您的蒞臨與祝福。"
+  map_description: [
+    "點擊下方按鈕即可開啟 Google 地圖導航。",
+    "建議提早出發，預留交通與停車時間。"
+  ],
+  reminders: [
+    "建議提前 10 至 15 分鐘抵達",
+    "現場提供地下停車位",
+    "敬請準時入席"
+  ],
+  note: "敬請準時入席"
 };
 
 const photoSources = [
@@ -33,7 +36,8 @@ const state = {
   currentIndex: 0,
   autoPlayId: null,
   startX: 0,
-  deltaX: 0
+  deltaX: 0,
+  audioReady: true
 };
 
 document.addEventListener("DOMContentLoaded", async () => {
@@ -41,6 +45,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   renderWeddingInfo(weddingInfo);
   setupCarousel();
   setupMapButton(weddingInfo.map_link);
+  setupMusicToggle();
   setupFadeIn();
 });
 
@@ -72,6 +77,7 @@ function readEmbeddedWeddingInfo() {
     const raw = element?.textContent?.trim();
     return raw ? JSON.parse(raw) : null;
   } catch (error) {
+    console.warn("Failed to parse embedded wedding data.", error);
     return null;
   }
 }
@@ -79,31 +85,52 @@ function readEmbeddedWeddingInfo() {
 function renderWeddingInfo(data) {
   const groom = data.groom || defaultWeddingInfo.groom;
   const bride = data.bride || defaultWeddingInfo.bride;
+  const heroMessage = data.hero_message || defaultWeddingInfo.hero_message;
   const dateText = formatDate(data.date || defaultWeddingInfo.date);
-  const parkingText = normalizeTransportText(data.transport?.parking || defaultWeddingInfo.transport.parking);
-  const mrtText = normalizeTransportText(data.transport?.mrt || defaultWeddingInfo.transport.mrt);
-  const busText = normalizeTransportText(data.transport?.bus || defaultWeddingInfo.transport.bus);
+  const invitationMessage = Array.isArray(data.invitation_message) && data.invitation_message.length
+    ? data.invitation_message
+    : defaultWeddingInfo.invitation_message;
+  const mapDescription = Array.isArray(data.map_description) && data.map_description.length
+    ? data.map_description
+    : defaultWeddingInfo.map_description;
+  const reminders = Array.isArray(data.reminders) && data.reminders.length
+    ? data.reminders
+    : defaultWeddingInfo.reminders;
 
   setText("groom-name", groom);
   setText("bride-name", bride);
   setText("hero-date", dateText);
   setText("info-date", dateText);
   setText("info-time", data.time || defaultWeddingInfo.time);
+  setText("info-arrival-note", data.arrival_note || defaultWeddingInfo.arrival_note);
   setText("info-venue", data.venue || defaultWeddingInfo.venue);
   setText("info-address", data.address || defaultWeddingInfo.address);
-  setText("transport-parking", parkingText);
-  setText("transport-mrt", mrtText);
-  setText("transport-bus", busText);
-  setText("note-text", data.note || defaultWeddingInfo.note);
   setText("footer-invite", `${groom} & ${bride} 敬邀`);
 
-  const scheduleList = document.getElementById("schedule-list");
-  scheduleList.innerHTML = "";
+  const heroMessageElement = document.querySelector(".hero-message");
+  if (heroMessageElement) {
+    heroMessageElement.textContent = heroMessage;
+  }
 
-  (data.schedule || defaultWeddingInfo.schedule).forEach((item) => {
+  invitationMessage.forEach((line, index) => {
+    setText(`invitation-message-line${index + 1}`, line);
+  });
+
+  mapDescription.forEach((line, index) => {
+    setText(`map-description-line${index + 1}`, line);
+  });
+
+  renderReminderList(reminders);
+}
+
+function renderReminderList(items) {
+  const reminderList = document.getElementById("reminder-list");
+  reminderList.innerHTML = "";
+
+  items.forEach((item) => {
     const listItem = document.createElement("li");
     listItem.textContent = item;
-    scheduleList.appendChild(listItem);
+    reminderList.appendChild(listItem);
   });
 }
 
@@ -175,6 +202,56 @@ function setupMapButton(mapLink) {
   });
 }
 
+function setupMusicToggle() {
+  const audio = document.getElementById("bgm-audio");
+  const button = document.getElementById("music-toggle");
+
+  if (!audio || !button) {
+    return;
+  }
+
+  audio.addEventListener("error", () => {
+    state.audioReady = false;
+    updateMusicButton(false);
+    console.warn("Background music file could not be loaded: assets/music/bgm.mp3");
+  });
+
+  button.addEventListener("click", async () => {
+    if (!state.audioReady) {
+      return;
+    }
+
+    if (audio.paused) {
+      try {
+        await audio.play();
+        updateMusicButton(true);
+      } catch (error) {
+        console.warn("Background music playback was blocked or unavailable.", error);
+        updateMusicButton(false);
+      }
+      return;
+    }
+
+    audio.pause();
+    updateMusicButton(false);
+  });
+
+  audio.addEventListener("pause", () => updateMusicButton(false));
+  audio.addEventListener("play", () => updateMusicButton(true));
+}
+
+function updateMusicButton(isPlaying) {
+  const button = document.getElementById("music-toggle");
+
+  if (!button) {
+    return;
+  }
+
+  button.classList.toggle("is-playing", isPlaying);
+  button.setAttribute("aria-pressed", String(isPlaying));
+  button.setAttribute("aria-label", isPlaying ? "暫停背景音樂" : "播放背景音樂");
+}
+
 function setupFadeIn() {
   const sections = document.querySelectorAll(".fade-section");
 
@@ -202,7 +279,7 @@ function setupFadeIn() {
 
 function startAutoPlay() {
   stopAutoPlay();
-  state.autoPlayId = window.setInterval(() => moveSlide(1), 4500);
+  state.autoPlayId = window.setInterval(() => moveSlide(1), 6000);
 }
 
 function stopAutoPlay() {
@@ -258,18 +335,6 @@ function setText(id, value) {
   if (element) {
     element.textContent = value;
   }
-}
-
-function normalizeTransportText(value) {
-  if (!value) {
-    return "交通資訊待補";
-  }
-
-  if (value.includes("自行填寫")) {
-    return "交通資訊待補";
-  }
-
-  return value.replace(/[()（）]/g, "").trim();
 }
 
 function formatDate(dateString) {
